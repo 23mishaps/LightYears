@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.29.2)
+cmake_minimum_required(VERSION 3.28.0)
 
 project(LightYears
 	VERSION 1.0.0
@@ -10,12 +10,24 @@ set(CMAKE_CXX_STANDARD 14)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS       OFF)
 
+
+
+include(FetchContent)
+set(SFML_LIB_NAME SFML)
+
+FetchContent_Declare(
+	${SFML_LIB_NAME}
+	GIT_REPOSITORY https://github.com/SFML/SFML #the link to the repository
+	GIT_TAG 2.6.0 #the version of the git repository we want to use
+	GIT_SHALLOW FALSE #want a deep copy of the repository not a shallow copy
+)
+
+FetchContent_MakeAvailable(${SFML_LIB_NAME}) #after we fetch it make it avaible to our project
+
+
 #creates a variable. the above set() functions also create variables
 #the variable name is on the left, the value of the variable is on the right
 #to get the contents of the variable you use the ${}
 set(LIGHT_YEARS_GAME_TARGET_NAME LightYearsGame)
 
-#to use the variable use dollar sign, curly boys and the name
-add_executable(${LIGHT_YEARS_GAME_TARGET_NAME}
-	${CMAKE_CURRENT_SOURCE_DIR}/LightYears/src/main.cpp 
-)
+add_subdirectory(LightYears)

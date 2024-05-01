@@ -1,4 +1,37 @@
 #to use the variable use dollar sign, curly boys and the name
 add_executable(${LIGHT_YEARS_GAME_TARGET_NAME}
 	${CMAKE_CURRENT_SOURCE_DIR}/src/main.cpp 
+	${CMAKE_CURRENT_SOURCE_DIR}/Include/Framework/Application.h
+	${CMAKE_CURRENT_SOURCE_DIR}/src/Framework/Application.cpp
 )
+
+#linking library files to the project
+target_link_libraries(${LIGHT_YEARS_GAME_TARGET_NAME} PUBLIC sfml-graphics)
+target_link_libraries(${LIGHT_YEARS_GAME_TARGET_NAME} PUBLIC sfml-audio)
+target_link_libraries(${LIGHT_YEARS_GAME_TARGET_NAME} PUBLIC sfml-system)
+target_link_libraries(${LIGHT_YEARS_GAME_TARGET_NAME} PUBLIC sfml-window)
+
+
+#target is lightyearsgame look for header files here (in the include folder)
+target_include_directories(${LIGHT_YEARS_GAME_TARGET_NAME} PUBLIC 
+	${CMAKE_CURRENT_SOURCE_DIR}/Include
+)
+
+
+#create a function the 1st parameter is the function name, the 2nd and 3rd are the arguments 
+function(CopyLibToTarget LIB_NAME TARGET_NAME)
+	add_custom_command(TARGET ${TARGET_NAME}
+		POST_BUILD
+		COMMAND 
+		${CMAKE_COMMAND} -E copy_if_different #avoid self copy
+		$<TARGET_FILE:${LIB_NAME}>   #copy the contenets of this file
+		$<TARGET_FILE_DIR:${TARGET_NAME}> #and add to this directory
+	)
+endFunction()
+
+CopyLibToTarget(sfml-graphics ${LIGHT_YEARS_GAME_TARGET_NAME})
+CopyLibToTarget(sfml-audio ${LIGHT_YEARS_GAME_TARGET_NAME})
+CopyLibToTarget(sfml-window ${LIGHT_YEARS_GAME_TARGET_NAME})
+CopyLibToTarget(sfml-system ${LIGHT_YEARS_GAME_TARGET_NAME})
+
+
